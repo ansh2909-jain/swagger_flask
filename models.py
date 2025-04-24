@@ -14,3 +14,12 @@ class Student(db.Model):
 
     def __repr__(self):
         return f'<Student {self.firstname}>'
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.firstname,
+            # Include other fields here
+        }
+ 
+ 

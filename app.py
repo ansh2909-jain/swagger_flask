@@ -78,7 +78,8 @@ def hello():
     }
 })
 def goodbye():
-    return redirect(url_for('students'))
+    user = request.environ.get("user")
+    return jsonify(message=f"Goodbye, {user['name']}! Hope you're doing great!")
 
 @app.route('/students/', methods=["GET"])
 @swag_from({
@@ -94,7 +95,7 @@ def goodbye():
 })
 def students():
     students = Student.query.all()
-    return render_template('index.html', students=students)
+    return jsonify([student.to_dict() for student in students])
 
 @app.route('/<int:student_id>/', methods=["GET"])
 @swag_from({
@@ -118,7 +119,7 @@ def students():
 })
 def student(student_id):
     student = Student.query.get_or_404(student_id)
-    return render_template('student.html', student=student)
+    return jsonify(student.to_dict())
 
 @app.route('/<int:student_id>/edit/', methods=['GET', 'POST'])
 @swag_from({
